@@ -72,7 +72,7 @@ public class Serializable: NSObject {
                     setValue(propertiesDictionary,
                         value: dataPropValue.base64EncodedStringWithOptions(.Encoding64CharacterLineLength), forKey: propName)
                 } else if let datePropValue = propValue as? NSDate {
-                    setValue(propertiesDictionary, value: datePropValue.timeIntervalSince1970, forKey: propName)
+                    setValue(propertiesDictionary, value: self.dateToSringJSON(datePropValue), forKey: propName)
                 } else {
                     setValue(propertiesDictionary, value: propValue, forKey: propName)
                 }
@@ -152,5 +152,16 @@ public class Serializable: NSObject {
     
     func isEnum(any: Any) -> Bool {
         return Mirror(reflecting: any).displayStyle == .Enum
+    }
+    
+    
+    func dateToSringJSON(date: NSDate) -> String
+    {
+        let format = "MMM d, yyyy hh:mm:ss a"
+        let formatter:NSDateFormatter = NSDateFormatter()
+        formatter.locale = NSLocale(localeIdentifier: "en_US_POSIX")
+        formatter.timeZone = NSTimeZone()
+        formatter.dateFormat = format
+        return formatter.stringFromDate(date)
     }
 }
